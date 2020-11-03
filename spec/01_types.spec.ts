@@ -6,11 +6,11 @@ describe('types', () => {
             let y;
             y = 3.14;
             y = 'tacos';
-            y = ['dog','cat'];
+            y = ['dog', 'cat'];
             let z: any = 3;
             z = 'ahhhh';
             let q: string[];
-            q = ['bird','plane'];
+            q = ['bird', 'plane'];
         });
 
         it('more let', () => {
@@ -74,6 +74,85 @@ describe('types', () => {
             const info = formatName('han', 'solo');
             expect(info[0]).toBe('solo, han');
             expect(info[1]).toBe(9);
+        });
+    });
+
+    describe('function literals', () => {
+        it('has three ways but we use two', () => {
+            expect(add(2, 3)).toBe(5); // can forward reference named functions
+            // expect(sub(10,8)).toBe(2); // cant forward reference anonymous functions
+
+            // named function
+            function add(a: number, b: number): number {
+                return a + b;
+            }
+
+            // anonymous function that a var points to
+            const sub = (a: number, b: number): number => a - b;
+
+            expect(add(2, 3)).toBe(5);
+            expect(sub(10, 8)).toBe(2);
+        });
+        it('type aliases', () => {
+            type MathOp = (x: number, y: number) => number;
+            const add: MathOp = (a: number, b: number): number => a + b;
+            function doMathAndDouble(op: MathOp, num: number): number {
+                return op(num + num, num + num);
+            }
+            // higher ordered function - a function that takes one or more functions as args, and/or returns a function
+            const result = doMathAndDouble(add, 10);
+            const result2 = doMathAndDouble((x, y) => x % y, 5); // can pass in lambdas as long as they match MathOp type
+            const weirdMath = (p: number, q: number) => p * 2 + q;
+            const result4 = doMathAndDouble(weirdMath, 10);
+
+            expect(result).toBe(40);
+            expect(result2).toBe(0);
+        });
+    });
+    describe('object literals', () => {
+        it('structural typing with objects', () => {
+            function logIt(thingy: { message: string }) { // {message: string} is an anonymous interface
+                console.log(thingy.message);
+            }
+
+            logIt({ message: 'call mom' });
+
+            const phoneCall = {
+                from: 'bill',
+                to: 'you',
+                message: 'ahhhhhh'
+            }
+
+            logIt(phoneCall); // this is really cool, it just ignores the rest of the phoneCall properties
+        });
+
+        it('basic object lits', () => {
+            const thor = {
+                title: 'thor',
+                director: 'me',
+                year: 2122
+            }
+            thor.year = 2919;
+            // thor.yearReleased = 2018; // this works in JS, just adds property to thor object, not great behavior
+        });
+
+        it('obj lits details', () => {
+            interface Song {
+                title: string,
+                artist: string,
+                lastPlayed?: string,
+                [key: string]: any // wildcard for extra properties someone may want to add during initialzation
+            }
+            const rof: Song = {
+                title: 'title',
+                artist: 'artist',
+                lastPlayed: 'morning',
+                producedBy: 'joe'
+            }
+            const bg: Song = {
+                title: 'new title',
+                artist: 'new artist'
+            }
         });
     });
 });
