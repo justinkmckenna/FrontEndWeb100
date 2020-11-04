@@ -7,7 +7,7 @@ describe('functions', () => {
                 const middle = mi ? ` ${mi}.` : '';
                 return `${l}, ${f}${middle}`;
             }
-            expect(formatName('han', 'solo', '')).toBe('solo, han'):
+            expect(formatName('han', 'solo', '')).toBe('solo, han');
             expect(formatName('han', 'solo')).toBe('solo, han');
             expect(formatName('han', 'solo', 'd')).toBe('solo, han d.');
         });
