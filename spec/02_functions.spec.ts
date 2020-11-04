@@ -181,7 +181,7 @@ describe('functions', () => {
     });
 
     describe('practice', () => {
-        fit('try it', () => {
+        it('try it', () => {
             interface Vehicle {
                 vin: string;
                 make: string;
